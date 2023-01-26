@@ -8,6 +8,7 @@ import (
 
 	"github.com/joho/godotenv"
 	db "github.com/ttimmatti/ironfish-node-tg/db"
+	"github.com/ttimmatti/ironfish-node-tg/env"
 	msgs "github.com/ttimmatti/ironfish-node-tg/tg-msgs"
 )
 
@@ -25,10 +26,13 @@ func main() {
 
 	onExit()
 
-	db.DB = db.SetConn(getDbEnv())
-	msgs.ADMIN_ID = getAdminIdEnv()
+	db.DB = db.SetConn(env.GetDbEnv())
+	msgs.ADMIN_ID = env.GetAdminIdEnv()
 
+	log.Println("Start receiving")
 	msgs.StartReceiving(TG_API, UPDATE_FREQ)
+
+	//TODO: make each sendMsg try twice
 
 	// rules for error. if it's bad, send to admin
 	// if it's ok - log, if user - user

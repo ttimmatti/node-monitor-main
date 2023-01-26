@@ -6,22 +6,28 @@ import (
 	"io"
 	"log"
 	"net/http"
+
+	"github.com/ttimmatti/ironfish-node-tg/errror"
 )
 
 func sendMsg(msg *SendMsg) error {
 	respByte, err := json.Marshal(msg)
 	if err != nil {
-		log.Println(err)
-		//TODO: ret err
+		return errror.WrapErrorF(err,
+			errror.ErrorCodeFailure,
+			"sendMsg_json_marshal_err")
 	}
 
 	resp, err := http.Post(TG_API+"/sendMessage", "Content-Type: application/json", bytes.NewBuffer(respByte))
 	if err != nil {
-		return err
+		return errror.WrapErrorF(err,
+			errror.ErrorCodeFailure,
+			"sendMsg_post_msg")
 	}
 
-	// remove for prod
 	defer resp.Body.Close()
+
+	// remove for prod
 	response, _ := io.ReadAll(resp.Body)
 	log.Println("\nPosted to tg:", string(respByte))
 	log.Println("\nResponse from tg:", string(response))

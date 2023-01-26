@@ -1,4 +1,4 @@
-package main
+package env
 
 import (
 	"log"
@@ -8,7 +8,7 @@ import (
 
 // ////////////////////////////////////////////////////////////////////////
 // ENVIRONMENT
-func getDbEnv() (string, string, string, string) {
+func GetDbEnv() (string, string, string, string) {
 	port, user, pass, dbname := os.Getenv("PORT"),
 		os.Getenv("USERNAME"),
 		os.Getenv("PASS"),
@@ -22,7 +22,7 @@ func getDbEnv() (string, string, string, string) {
 	return port, user, pass, dbname
 }
 
-func getAdminIdEnv() int64 {
+func GetAdminIdEnv() int64 {
 	adminId := os.Getenv("ADMIN_ID")
 	id, err := strconv.ParseInt(adminId, 10, 64)
 	if err != nil {

@@ -2,48 +2,55 @@ package errror
 
 import (
 	"fmt"
-	"log"
-	"runtime"
-	"strings"
 )
 
 // we WRAP the error exactly where it appears and then we pass it up
 // if after its transported up it need to be sent to admin, we ErrInJson it
 
-// returns error for logging. >
-func FormatL(err0 error) error {
-	return fmt.Errorf(">%s",
-		formatError(err0))
+func WrapErrorF(orig error, code ErrorCode, cause string, a ...interface{}) error {
+	return &Error{
+		Orig: orig,
+		code: code,
+		msg:  fmt.Sprintf(cause, a...),
+	}
 }
 
-// returns user error. &
-func FormatU(err0 error) error {
-	return fmt.Errorf("&%s",
-		formatError(err0))
-}
-
-// returns user error. &
-func FormatsU(err0 string) error {
-	return fmt.Errorf("&%s",
-		formatError(fmt.Errorf(err0)))
-}
-
-// returns error for admin. !
-func FormatA(err0 error) error {
-	return fmt.Errorf("!%s",
-		formatError(err0))
-}
-
-func formatError(err0 error) string {
-	_, file, cl, ok := runtime.Caller(2)
-	if !ok {
-		log.Println("COULDNT WRAP ERROR")
+// Error returns the message, when wrapping errors the wrapped error is returned.
+func (e *Error) Error() string {
+	if e.Orig != nil {
+		return fmt.Sprintf("%s: %v", e.msg, e.Orig)
 	}
 
-	fileSep := strings.Split(file, "/")
-	if len(fileSep) > 2 {
-		file = fileSep[len(fileSep)-2]
-	}
-
-	return fmt.Sprintf("%s LINE %d: %s", file, cl, err0)
+	return e.msg
 }
+
+// NewErrorf instantiates a new error.
+func NewErrorf(code ErrorCode, cause string, a ...interface{}) error {
+	return WrapErrorF(nil, code, cause, a...)
+}
+
+// Code returns the code representing this error.
+func (e *Error) Code() ErrorCode {
+	return e.code
+}
+
+type Error struct {
+	Orig error
+	msg  string
+	code ErrorCode
+}
+
+type ErrorCode uint
+
+const (
+	ErrorCodeUnknown ErrorCode = iota
+	ErrorCodeFailure
+	ErrorCodeNotFound
+	ErrorCodeInvalidArgument
+	ErrorCodeIsBanned
+)
+
+// for not found and invalid argument, return to user
+// for failure and (unknown) return to admin
+
+// in each package errors can be handled differently

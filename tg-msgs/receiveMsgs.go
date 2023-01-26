@@ -27,6 +27,7 @@ func StartReceiving(tg_api string, update_sec int64) {
 
 		for _, msg_m := range msgs {
 			msg := msg_m.Message
+			log.Println(msg)
 			HandleMsg(msg)
 		}
 	}

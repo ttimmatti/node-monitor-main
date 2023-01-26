@@ -7,13 +7,14 @@ import (
 	"net/url"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
-	"github.com/ttimmatti/ironfish-node-tg/errror"
 )
 
 const USERS_T = "users"
 const SERVERS_T = "servers"
 
 var DB *sql.DB
+
+// 26jan. this file is set
 
 func SetConn(port, user, pass, dbname string) *sql.DB {
 	dsn := url.URL{
@@ -30,13 +31,11 @@ func SetConn(port, user, pass, dbname string) *sql.DB {
 
 	db, err := sql.Open("pgx", dsn.String())
 	if err != nil {
-		err = errror.FormatL(err)
 		log.Fatalln("Could not open DB:", err)
 	}
 	//defer closeConn()
 
 	if err := db.PingContext(context.Background()); err != nil {
-		err = errror.FormatL(err)
 		log.Fatalln("Could not ping DB:", err)
 	}
 
