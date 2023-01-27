@@ -9,8 +9,8 @@ import (
 
 const ADMIN_COMMANDS = `/allusers
 /allservers
-/banid
-/unbanid
+/banuser
+/unbanuser
 /admincmd`
 
 func adminCmd(cmd string, msg Msg) error {
@@ -23,18 +23,19 @@ func adminCmd(cmd string, msg Msg) error {
 		if err := handleAllServers(); err != nil {
 			return fmt.Errorf("%w", err)
 		}
-	case "/banid":
-		if err := handleBanId(msg); err != nil {
-
+	case "/banuser":
+		if err := handleBanUsername(msg); err != nil {
+			return fmt.Errorf("%w", err)
 		}
-	case "/unbanid":
-		if err := handleUnbanId(msg); err != nil {
-
+	case "/unbanuser":
+		if err := handleUnbanUsername(msg); err != nil {
+			return fmt.Errorf("%w", err)
 		}
 	case "/admincmd":
 		if err := handleAdminCmd(); err != nil {
-
+			return fmt.Errorf("%w", err)
 		}
+
 	}
 
 	return nil
@@ -54,18 +55,58 @@ func handleAdminCmd() error {
 	return nil
 }
 
-func handleUnbanId(msg Msg) error {
-	panic("unimplemented")
+func handleBanUsername(msg Msg) error {
+	_, username, _, err := parseCmd(msg.Text)
+	if err != nil {
+		return fmt.Errorf("handle_ban_username: %w", err)
+	}
+
+	err = db.BanUser(username)
+	if err != nil {
+		return fmt.Errorf("admin_handle-ban-username: %w", err)
+	}
+
+	msgResp := &SendMsg{
+		Chat_id:    ADMIN_ID,
+		Text:       fmt.Sprintf("banned: %s", username),
+		Parse_mode: "",
+	}
+
+	if err := sendMsg(msgResp); err != nil {
+		return fmt.Errorf("handle-ban-username: %w", err)
+	}
+
+	return nil
 }
 
-func handleBanId(msg Msg) error {
-	panic("unimplemented")
+func handleUnbanUsername(msg Msg) error {
+	_, username, _, err := parseCmd(msg.Text)
+	if err != nil {
+		return fmt.Errorf("handle_ban_username: %w", err)
+	}
+
+	err = db.UnbanUser(username)
+	if err != nil {
+		return fmt.Errorf("admin_handle-unban-username: %w", err)
+	}
+
+	msgResp := &SendMsg{
+		Chat_id:    ADMIN_ID,
+		Text:       fmt.Sprintf("unbanned: %s", username),
+		Parse_mode: "",
+	}
+
+	if err := sendMsg(msgResp); err != nil {
+		return fmt.Errorf("handle-unban-username: %w", err)
+	}
+
+	return nil
 }
 
 func handleAllServers() error {
 	result, err := db.ReadUsers()
 	if err != nil {
-		return fmt.Errorf("admin_handle-all-users: %w", err)
+		return fmt.Errorf("admin_handle-all-servers: %w", err)
 	}
 
 	response := wrapDbResp(result)

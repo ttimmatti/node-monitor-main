@@ -43,7 +43,7 @@ func ReadUser(chat_id int64) (string, error) {
 // returns string username;;...;;started:;username
 func ReadUsers() (string, error) {
 	rows, err := DB.QueryContext(context.Background(),
-		"select id,chat_id,username,name,started from users")
+		"select id,chat_id,username,name,banned,started from users")
 	if err != nil {
 		return "", errror.WrapErrorF(err,
 			errror.ErrorCodeFailure,
@@ -54,16 +54,17 @@ func ReadUsers() (string, error) {
 
 	for i := 0; rows.Next(); i++ {
 		var (
-			serial, id, username, name, started string
+			serial, id, username, name, banned, started string
 		)
 
-		_ = rows.Scan(&serial, &id, &username, &name, &started)
+		_ = rows.Scan(&serial, &id, &username, &name, &banned, &started)
 
 		row = append(row, serial+";;"+
 			id+";;"+
 			username+";;"+
 			name+";;"+
-			started)
+			banned+";;"+
+			started[:len(started)-10])
 	}
 
 	result := strings.Join(row, ":;")
@@ -71,6 +72,7 @@ func ReadUsers() (string, error) {
 	return result, nil
 }
 
+// id;;chat_id;;ip:;
 func ReadServers() (string, error) {
 	rows, err := DB.QueryContext(context.Background(),
 		"select id,chat_id,ip from servers")
@@ -99,4 +101,54 @@ func ReadServers() (string, error) {
 	return result, nil
 }
 
-//implement get, delete users for admin
+func BanUser(username string) error {
+	sqlresult, err := DB.ExecContext(context.Background(),
+		"update users set banned=TRUE where username=$1",
+		username)
+	if err != nil {
+		return errror.WrapErrorF(err,
+			errror.ErrorCodeFailure,
+			"db_ban-user_exec_err")
+	}
+
+	rows, err := sqlresult.RowsAffected()
+	if err != nil {
+		return errror.WrapErrorF(err,
+			errror.ErrorCodeFailure,
+			"db_ban-user_rows-affect_err")
+	}
+
+	if rows == 0 {
+		return errror.NewErrorf(
+			errror.ErrorCodeNotFound,
+			"db_ban-user_not-updated")
+	}
+
+	return nil
+}
+
+func UnbanUser(username string) error {
+	sqlresult, err := DB.ExecContext(context.Background(),
+		"update users set banned=FALSE where username=$1",
+		username)
+	if err != nil {
+		return errror.WrapErrorF(err,
+			errror.ErrorCodeFailure,
+			"db_unban-user_exec_err")
+	}
+
+	rows, err := sqlresult.RowsAffected()
+	if err != nil {
+		return errror.WrapErrorF(err,
+			errror.ErrorCodeFailure,
+			"db_unban-user_rows-affect_err")
+	}
+
+	if rows == 0 {
+		return errror.NewErrorf(
+			errror.ErrorCodeNotFound,
+			"db_unban-user_not-updated")
+	}
+
+	return nil
+}

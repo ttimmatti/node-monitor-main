@@ -10,6 +10,7 @@ import (
 	db "github.com/ttimmatti/ironfish-node-tg/db"
 	"github.com/ttimmatti/ironfish-node-tg/env"
 	msgs "github.com/ttimmatti/ironfish-node-tg/tg-msgs"
+	node_worker "github.com/ttimmatti/ironfish-node-tg/worker"
 )
 
 const TG_API = "https://api.telegram.org/bot5864005496:AAFYPu4VK53PD8rjmrMyFfIpnyaiCnQASeo"
@@ -28,6 +29,10 @@ func main() {
 
 	db.DB = db.SetConn(env.GetDbEnv())
 	msgs.ADMIN_ID = env.GetAdminIdEnv()
+
+	if err := node_worker.Start(); err != nil {
+		log.Println(err)
+	}
 
 	log.Println("Start receiving")
 	msgs.StartReceiving(TG_API, UPDATE_FREQ)

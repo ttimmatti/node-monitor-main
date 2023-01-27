@@ -27,7 +27,7 @@ func UserExistIsBanned(chat_id int64) (bool, bool) {
 		return false, false
 	}
 
-	if isBanned == "t" {
+	if isBanned == "true" {
 		return true, true
 	}
 
@@ -39,8 +39,8 @@ func AddUser(chat_id int64, username, first_name string, date int64) error {
 	time := time.Unix(date, 0)
 
 	sqlresult, err := DB.ExecContext(context.Background(),
-		"insert into users(chat_id,username,name,started) values($1,$2,$3,$4)",
-		id, username, first_name, time)
+		"insert into users(chat_id,username,name,banned,started) values($1,$2,$3,$4,$5)",
+		id, username, first_name, false, time)
 	if err != nil {
 		// the user is a duplicate(which can't ne as i always check if user IsUser)
 		// or some fields are empty or corrupted

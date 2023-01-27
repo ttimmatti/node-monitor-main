@@ -6,6 +6,7 @@ import (
 
 	"github.com/ttimmatti/ironfish-node-tg/db"
 	"github.com/ttimmatti/ironfish-node-tg/errror"
+	node_worker "github.com/ttimmatti/ironfish-node-tg/worker"
 )
 
 const WELCOME = `*Fack Nodes IronFish Monitor Bot*`
@@ -34,21 +35,14 @@ func HandleMsg(msg Msg) {
 		return
 	}
 
-	handleCmd(IsAdmin(msg.From.Id), cmd, msg)
+	if err := handleCmd(IsAdmin(msg.From.Id), cmd, msg); err != nil {
+		log.Println(err)
+	}
 
 	//TODO: make separate handler for admin
 }
 
 func handleCmd(isAdmin bool, cmd string, msg Msg) error {
-	if isAdmin {
-		if err := adminCmd(cmd, msg); err != nil {
-			return errror.WrapErrorF(err,
-				errror.ErrorCodeFailure,
-				"admin_cmd_execution")
-		}
-		return nil
-	}
-
 	isUser, isBanned := db.UserExistIsBanned(msg.From.Id)
 	if isBanned {
 		return errror.NewErrorf(
@@ -80,6 +74,14 @@ func handleCmd(isAdmin bool, cmd string, msg Msg) error {
 		}
 	}
 	//TODO: if user send wrong cmd return him the error
+
+	if isAdmin {
+		if err := adminCmd(cmd, msg); err != nil {
+			return errror.WrapErrorF(err,
+				errror.ErrorCodeFailure,
+				"admin_cmd_execution:")
+		}
+	}
 
 	return nil
 }
@@ -251,6 +253,16 @@ func handleUserAddServer(isUser bool, msg Msg) error {
 		}
 	}
 
+	server := node_worker.Server{
+		Owner_id: "",
+		Ip:       server_ip,
+	}
+	if err := server.Ping(); err != nil {
+		return errror.WrapErrorF(err,
+			errror.ErrorCodeNotFound,
+			"handle-add-user-server:")
+	}
+
 	//it can be that the server is already in the db
 	// tell the user to check servers and verify that it's not there
 	// or contact me
@@ -309,9 +321,5 @@ func handleStart(isUser bool, msg Msg) error {
 }
 
 func IsAdmin(id int64) bool {
-	if id != ADMIN_ID {
-		return false
-	}
-
-	return true
+	return id == ADMIN_ID
 }
