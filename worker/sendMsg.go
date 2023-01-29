@@ -1,4 +1,4 @@
-package msgs
+package node_worker
 
 import (
 	"bytes"
@@ -9,6 +9,8 @@ import (
 
 	"github.com/ttimmatti/ironfish-node-tg/errror"
 )
+
+const TG_API = "https://api.telegram.org/bot5864005496:AAFYPu4VK53PD8rjmrMyFfIpnyaiCnQASeo"
 
 func sendMsg(msg *SendMsg) error {
 	respByte, err := json.Marshal(msg)
@@ -33,7 +35,6 @@ func sendMsg(msg *SendMsg) error {
 	log.Println("\nResponse from tg:", string(response))
 
 	//TODO: READ MSG, IF "OK":FALSE return error
-	// send msg multiple times on error
 
 	return nil
 }
@@ -43,5 +44,3 @@ type SendMsg struct {
 	Text       string `json:"text"`
 	Parse_mode string `json:"parse_mode"`
 }
-
-//TODO: implement func send error

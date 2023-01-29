@@ -75,7 +75,7 @@ func ReadUsers() (string, error) {
 // id;;chat_id;;ip:;
 func ReadServers() (string, error) {
 	rows, err := DB.QueryContext(context.Background(),
-		"select id,chat_id,ip from servers")
+		"select id,chat_id,ip,block,version from servers")
 	if err != nil {
 		return "", errror.WrapErrorF(err,
 			errror.ErrorCodeFailure,
@@ -86,14 +86,16 @@ func ReadServers() (string, error) {
 
 	for i := 0; rows.Next(); i++ {
 		var (
-			id, chat_id, ip string
+			id, chat_id, ip, block, version string
 		)
 
-		_ = rows.Scan(&id, &chat_id, &ip)
+		_ = rows.Scan(&id, &chat_id, &ip, &block, &version)
 
 		row = append(row, id+";;"+
 			chat_id+";;"+
-			ip)
+			ip+";;"+
+			block+";;"+
+			version)
 	}
 
 	result := strings.Join(row, ":;")

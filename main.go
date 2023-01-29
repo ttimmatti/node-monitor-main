@@ -30,9 +30,7 @@ func main() {
 	db.DB = db.SetConn(env.GetDbEnv())
 	msgs.ADMIN_ID = env.GetAdminIdEnv()
 
-	if err := node_worker.Start(); err != nil {
-		log.Println(err)
-	}
+	go node_worker.Start()
 
 	log.Println("Start receiving")
 	msgs.StartReceiving(TG_API, UPDATE_FREQ)

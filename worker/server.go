@@ -3,11 +3,13 @@ package node_worker
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strconv"
 	"time"
 
+	"github.com/ttimmatti/ironfish-node-tg/db"
 	"github.com/ttimmatti/ironfish-node-tg/errror"
 )
 
@@ -27,7 +29,7 @@ func (s *Server) Ping() error {
 	uri := "http://" + s.Ip + PORT + "/ping"
 
 	ctx, _ := context.WithTimeout(context.Background(),
-		1000*time.Millisecond)
+		2000*time.Millisecond)
 	r, err := http.NewRequestWithContext(ctx,
 		http.MethodGet,
 		uri, nil)
@@ -63,7 +65,7 @@ func (s *Server) Ping() error {
 }
 
 // last_block int64, version string, err
-func (s *Server) GetInfo() (int64, string, error) {
+func (s *Server) getInfo() (int64, string, error) {
 	uri := "http://" + s.Ip + PORT + "/get?ret=all"
 
 	ctx, _ := context.WithTimeout(context.Background(),
@@ -105,4 +107,21 @@ func (s *Server) GetInfo() (int64, string, error) {
 	version := "v" + v
 
 	return block, version, nil
+}
+
+func (s *Server) Update() (Server, error) {
+	block, version, err := s.getInfo()
+	if err != nil {
+		return *s, fmt.Errorf("server_Update: %w", err)
+	}
+
+	s.Last_block = block
+	s.Version = version
+
+	//update server in db
+	if err := db.UpdateBlVServer(s.Ip, version, block); err != nil {
+		return *s, fmt.Errorf("server_update: %w", err)
+	}
+
+	return *s, nil
 }

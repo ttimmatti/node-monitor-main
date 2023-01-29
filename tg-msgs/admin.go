@@ -104,7 +104,7 @@ func handleUnbanUsername(msg Msg) error {
 }
 
 func handleAllServers() error {
-	result, err := db.ReadUsers()
+	result, err := db.ReadServers()
 	if err != nil {
 		return fmt.Errorf("admin_handle-all-servers: %w", err)
 	}

@@ -65,7 +65,7 @@ func GetUserServers(chat_id int64) (string, error) {
 	id := fmt.Sprintf("%d", chat_id)
 
 	rows, err := DB.QueryContext(context.Background(),
-		"select ip from servers where chat_id=$1",
+		"select ip,block,version from servers where chat_id=$1",
 		id)
 	if err != nil {
 		//he does not have any servers
@@ -77,14 +77,14 @@ func GetUserServers(chat_id int64) (string, error) {
 	//TODO: change this to easy to read output
 	var result string
 	for rows.Next() {
-		var ip string
-		err := rows.Scan(&ip)
+		var ip, block, version string
+		err := rows.Scan(&ip, &block, &version)
 		if err != nil {
 			log.Println("GetUserServers: end of scan? SCAN err:", err)
 		}
 
 		ip = "\n" + strings.Join(strings.Split(ip, "."), "\\.")
-		result += ip
+		result += ip + "block:" + block + "version:" + version
 	}
 
 	return result, nil
@@ -113,6 +113,34 @@ func DeleteUserServer(chat_id int64, server_ip string) error {
 	if rows == 0 {
 		return errror.NewErrorf(errror.ErrorCodeNotFound,
 			"delete_user_server_rows_affected_0 (id,ip)", chat_id, server_ip)
+	}
+
+	return nil
+}
+
+func UpdateBlVServer(ip, v string, bl int64) error {
+	block := fmt.Sprintf("%d", bl)
+
+	sqlresult, err := DB.ExecContext(context.Background(),
+		"update servers set block=$1,version=$2 where ip=$3",
+		block, v, ip)
+	if err != nil {
+		// idk how it can happen
+		return errror.WrapErrorF(err, errror.ErrorCodeFailure,
+			"updateBlV_server_exec_err (ip)", ip)
+	}
+
+	rows, err := sqlresult.RowsAffected()
+	if err != nil {
+		// IF THIS RETURNS ERROR CHECK CHANGEUSERSERVER ROWSAFFECTED TOO
+		// AND EVERY OTHER ROWSAFFEVTED FUNC
+		return errror.WrapErrorF(err, errror.ErrorCodeNotFound,
+			"updateBlV_server_rows_affected_error (ip)", ip)
+	}
+
+	if rows == 0 {
+		return errror.NewErrorf(errror.ErrorCodeNotFound,
+			"updateBlV_server_rows_affected_0 (ip)", ip)
 	}
 
 	return nil
