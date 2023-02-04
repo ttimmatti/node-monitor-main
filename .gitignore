@@ -1,3 +1,6 @@
 .env
 .init
 .vscode
+tg-db/.env
+iron_node_worker/.env
+sui_node_worker/.env
