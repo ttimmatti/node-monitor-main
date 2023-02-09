@@ -7,14 +7,14 @@ import (
 	"github.com/ttimmatti/nodes-bot/tg-db/errror"
 )
 
-func handleError(err error, msg Msg) {
+func handleError(msg Msg, err error) {
 	var ierr *errror.Error
 	if !errors.As(err, &ierr) {
 		log.Println("error wosn't of type Error: ", err)
 		return
 	}
 
-	log.Println(err)
+	log.Printf("err: %s, Msg: %s --> %s", err, msg.From.Username, msg.Text)
 
 	switch ierr.Code() {
 	case errror.ErrorCodeFailure,
@@ -54,9 +54,18 @@ func handleError(err error, msg Msg) {
 		if err := sendMsg(msg); err != nil {
 			log.Println("handleError: Couldn't send error msg to user!!!")
 		}
+	case errror.ErrorCodeWrongCmd:
+		msg := &SendMsg{
+			Text:       "Wrong cmd\n---------\nНеправильная команда",
+			Chat_id:    msg.From.Id,
+			Parse_mode: "",
+		}
+		if err := sendMsg(msg); err != nil {
+			log.Println("handleError: Couldn't send error msg to user!!!")
+		}
 	}
 }
 
 const TEXT_NOPONG = `Error. Code: Server didn't respond
 -----------------------------		
-Скорее всего, вы не установили софт на сервер`
+Сервер не отвечает.`

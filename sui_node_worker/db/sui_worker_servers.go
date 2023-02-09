@@ -39,13 +39,12 @@ func UpdateTxVServer(ip, v string, bl int64) error {
 	return nil
 }
 
-func UpdateSyncUpdServer(ip string, synced, updated bool) error {
-	tz, _ := time.LoadLocation("Europe/Moscow")
-	tf := time.Now().In(tz).Format("Jan 2 15:04 MST")
+func UpdateSyncUpdServer(ip, status string, synced, updated bool) error {
+	t := time.Now().Unix()
 
 	sqlresult, err := DB.ExecContext(context.Background(),
-		"update "+SUI_SERVERS_DB+" set synced=$1,updated=$2,lastpong=$3 where ip=$4",
-		synced, updated, tf, ip)
+		"update "+SUI_SERVERS_DB+" set synced=$1,updated=$2,status=$3,lastpong=$4 where ip=$5",
+		synced, updated, status, fmt.Sprintf("%d", t), ip)
 	if err != nil {
 		// idk how it can happen
 		return errror.WrapErrorF(err, errror.ErrorCodeFailure,
@@ -71,7 +70,7 @@ func UpdateSyncUpdServer(ip string, synced, updated bool) error {
 // id;;chat_id;;ip:;
 func SuiReadServers() (string, error) {
 	rows, err := DB.QueryContext(context.Background(),
-		"select id,chat_id,ip,tx_id,version,synced,updated,lastpong from "+SUI_SERVERS_DB)
+		"select id,chat_id,ip,tx_id,version,synced,updated,status,lastpong from "+SUI_SERVERS_DB)
 	if err != nil {
 		return "", errror.WrapErrorF(err,
 			errror.ErrorCodeFailure,
@@ -82,10 +81,10 @@ func SuiReadServers() (string, error) {
 
 	for i := 0; rows.Next(); i++ {
 		var (
-			id, chat_id, ip, tx_id, version, synced, updated, lastPong string
+			id, chat_id, ip, tx_id, version, synced, updated, status, lastPong string
 		)
 
-		_ = rows.Scan(&id, &chat_id, &ip, &tx_id, &version, &synced, &updated, &lastPong)
+		_ = rows.Scan(&id, &chat_id, &ip, &tx_id, &version, &synced, &updated, status, &lastPong)
 
 		row = append(row, id+";;"+
 			chat_id+";;"+
@@ -94,7 +93,8 @@ func SuiReadServers() (string, error) {
 			version+";;"+
 			synced+";;"+
 			updated+";;"+
-			lastPong)
+			lastPong+";;"+
+			status)
 	}
 
 	result := strings.Join(row, ":;")

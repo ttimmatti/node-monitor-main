@@ -50,8 +50,8 @@ func StartReceiving(tg_api string, update_sec int64) {
 	}
 }
 
-func answerCBQ(i int64) {
-	resp, err := http.Get(TG_API + "/answerCallbackQuery?callback_query_id=" + fmt.Sprintf("%d", i))
+func answerCBQ(i string) {
+	resp, err := http.Get(TG_API + "/answerCallbackQuery?callback_query_id=" + i)
 	if err != nil {
 		log.Println("answerCallbackQuery: ", err)
 	}
@@ -146,7 +146,7 @@ type Msg struct {
 	}
 }
 type CBQ struct {
-	Id   int64
+	Id   string
 	From struct {
 		Id         int64
 		First_name string
@@ -167,6 +167,7 @@ type InlineKeyboardButton struct {
 type ReplyKeyboardMarkup struct {
 	Keyboard                [][]KeyBoardButton `json:"keyboard"`
 	Resize_keyboard         bool               `json:"resize_keyboard"`
+	Is_persistent           bool               `json:"is_persistent"`
 	One_time_keyboard       bool               `json:"one_time_keyboard"`
 	Input_field_placeholder string             `json:"input_field_placeholder"`
 }

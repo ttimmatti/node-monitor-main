@@ -28,6 +28,8 @@ func main() {
 
 	tg_api := env.GetTGApiEnv()
 
+	msgs.NODES_CHAT = env.GetNodesChat()
+
 	log.Println("Start receiving")
 	msgs.StartReceiving(tg_api, UPDATE_FREQ)
 

@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/ttimmatti/nodes-bot/tg-db/errror"
 )
@@ -86,7 +88,10 @@ func IronGetUserServers(chat_id int64) (string, error) {
 		ip = strings.Join(strings.Split(ip, "."), "\\.") + "\n"
 		version = strings.Join(strings.Split(version, "."), "\\.")
 		if lastPong != "" {
-			pong = "; LastReponse: _" + lastPong + "_"
+			t, _ := strconv.ParseInt(lastPong, 10, 64)
+			tz, _ := time.LoadLocation("Europe/Moscow")
+			tf := time.Unix(t, 0).In(tz).Format("Jan 2 15:04 MST")
+			pong = "; LastReponse: _" + tf + "_"
 		}
 
 		if block != "" {

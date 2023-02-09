@@ -34,6 +34,14 @@ func Start() {
 		if errs := handleServers(i); errs != nil {
 			log.Println("iron_node_worker: START: ", errs)
 		}
+		// once every few hours inspect all servers and notify those whose lastpong was more than 3 hours ago
+		// tell them if they don't use the bot they should consider deleting their server
+		// or there is something with the server
+		// if lastpong = 0 do nothing
+		if i%(36*4) == 0 {
+			// every 12 hours
+			filterLost()
+		}
 		time.Sleep(REPEAT_MIN * time.Minute)
 	}
 }
@@ -297,7 +305,7 @@ func GetServers(input string) ([]Server, error) {
 			updated = true
 		}
 		lastPongS := serverFields[7]
-		lastPong := time.Now().Unix()
+		var lastPong int64
 		if lastPongS != "" {
 			lastPong, _ = strconv.ParseInt(lastPongS, 10, 64)
 		}

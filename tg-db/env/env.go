@@ -39,3 +39,11 @@ func GetTGApiEnv() string {
 	}
 	return tgApi
 }
+
+func GetNodesChat() string {
+	chatid := os.Getenv("NODES_CHAT")
+	if len(chatid) < 2 {
+		log.Fatalln("env: nodes_chat_id empty")
+	}
+	return chatid
+}

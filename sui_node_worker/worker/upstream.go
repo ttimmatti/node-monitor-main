@@ -13,8 +13,6 @@ import (
 
 const SUI_RPC = "http://fullnode.testnet.sui.io:9000/"
 
-var GITHUB_TOKEN string
-
 // global version :
 // curl --location --request POST http://fullnode.testnet.sui.io:9000/ --header 'Content-Type: application/json' --data-raw '{ "jsonrpc":"2.0", "method":"rpc.discover","id":1}'
 var METHOD_DISCOVER = map[string]string{"jsonrpc": "2.0", "method": "rpc.discover", "id": "1"}
@@ -28,7 +26,7 @@ func GetNetworkVersion() (string, error) {
 	postBody := bytes.NewBuffer(bodyBytes)
 
 	ctx, _ := context.WithTimeout(context.Background(),
-		6000*time.Millisecond)
+		10000*time.Millisecond)
 	r, err := http.NewRequestWithContext(ctx,
 		http.MethodPost,
 		SUI_RPC, postBody)
@@ -66,7 +64,7 @@ func GetNetworkTxId() (int64, error) {
 	postBody := bytes.NewBuffer(bodyBytes)
 
 	ctx, _ := context.WithTimeout(context.Background(),
-		6000*time.Millisecond)
+		10000*time.Millisecond)
 	r, err := http.NewRequestWithContext(ctx,
 		http.MethodPost,
 		SUI_RPC, postBody)

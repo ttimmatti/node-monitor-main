@@ -39,11 +39,3 @@ func GetTGApiEnv() string {
 	}
 	return tgApi
 }
-
-func GetGitTokenEnv() string {
-	token := os.Getenv("GITHUB_TOKEN")
-	if len(token) < 2 {
-		log.Fatalln("env: tg_api empty")
-	}
-	return token
-}

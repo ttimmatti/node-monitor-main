@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/ttimmatti/nodes-bot/tg-db/db"
 	"github.com/ttimmatti/nodes-bot/tg-db/errror"
 )
 
-const PORT = ":6596"
+const PORTfish = ":6596"
 
 func handleIronfishMsg(isUser bool, msg Msg) error {
 	_, cmd2, _, _ := parseCmd(msg.Text)
@@ -39,9 +40,13 @@ func handleIronfishMsg(isUser bool, msg Msg) error {
 }
 
 func ironfishHelp(isUser bool, msg Msg) error {
+	ironfish_help := strings.Join(strings.Split(IRONFISH_HELP0, "."), "\\.")
+	ironfish_help = strings.Join(strings.Split(ironfish_help, "-"), "\\-")
+	ironfish_help = strings.Join(strings.Split(ironfish_help, "("), "\\(")
+	ironfish_help = strings.Join(strings.Split(ironfish_help, ")"), "\\)")
+
 	if isUser {
-		msg2 := ReplyWithReplyKeyboard(msg.From.Id, IRONFISH_HELP, "HTML",
-			IRON_HELP_RPL_KEYBOARD)
+		msg2 := ReplyWithInlKey(msg.From.Id, ironfish_help, PARSE_MODE, IRONFFISH_HELP_INL_KEYBOARD)
 
 		if err := sendMsg(msg2); err != nil {
 			return fmt.Errorf("ironfishHelp: %w", err)
@@ -96,7 +101,7 @@ func ironUserDeleteServer(isUser bool, msg Msg) error {
 	// if rows affected = 1 --> success
 	// if rows affected = 0 --> no changes
 
-	msg2 := DefaultReply(msg.From.Id, "succesfully deleted server ip", PARSE_MODE)
+	msg2 := DefaultReply(msg.From.Id, "succesfully deleted server", PARSE_MODE)
 
 	if err := sendMsg(msg2); err != nil {
 		return fmt.Errorf("ironUserDeleteServer: %w", err)
@@ -112,7 +117,10 @@ func ironUserServers(isUser bool, msg Msg) error {
 			return fmt.Errorf("ironUserServers: %w", err)
 		}
 
-		msg2 := DefaultReply(msg.From.Id, "*YOUR SERVERS:*"+servers, PARSE_MODE)
+		msg2 := ReplyWithReplyKeyboard(msg.From.Id,
+			"*YOUR SERVERS:*"+servers,
+			PARSE_MODE,
+			SERVERS_RPL_KEYBOARD)
 
 		if err := sendMsg(msg2); err != nil {
 			return fmt.Errorf("ironUserServers: %w", err)
@@ -130,6 +138,14 @@ func ironUserServers(isUser bool, msg Msg) error {
 
 // ready
 func ironUserAddServer(isUser bool, msg Msg) error {
+	if !isUser {
+		msg2 := DefaultReply(msg.From.Id, "You're not registered, pls start with a /start cmd", "HTML")
+		if err := sendMsg(msg2); err != nil {
+			return fmt.Errorf("ironUserServers: %w", err)
+		}
+		return nil
+	}
+
 	//parse cmd
 	_, _, server_ip, err := parseCmd(msg.Text)
 	if err != nil {
@@ -143,17 +159,7 @@ func ironUserAddServer(isUser bool, msg Msg) error {
 			"ironUserAddServer: ip not valid")
 	}
 
-	if !isUser {
-		err := db.AddUser(msg.From.Id,
-			msg.From.Username,
-			msg.From.First_name,
-			msg.Date)
-		if err != nil {
-			return fmt.Errorf("ironUserAddServer: %w", err)
-		}
-	}
-
-	pong := pingServer(server_ip)
+	pong := pingIronServer(server_ip)
 	if !pong {
 		return errror.NewErrorf(errror.ErrorCodePongFalse,
 			"server does not respond to ping")
@@ -175,7 +181,7 @@ func ironUserAddServer(isUser bool, msg Msg) error {
 	return nil
 }
 
-func pingServer(server_ip string) bool {
+func pingIronServer(server_ip string) bool {
 	//TODO: ping server somehow!!!
 	// server := node_worker.Server{
 	// 	Owner_id: "",
@@ -186,7 +192,7 @@ func pingServer(server_ip string) bool {
 	// 		errror.ErrorCodeNotFound,
 	// 		"handle-add-user-server:")
 	// }
-	uri := "http://" + server_ip + PORT + "/ping"
+	uri := "http://" + server_ip + PORTfish + "/ping"
 
 	ctx, _ := context.WithTimeout(context.Background(),
 		2000*time.Millisecond)
@@ -214,23 +220,30 @@ func pingServer(server_ip string) bool {
 	return true
 }
 
-const IRONFISH_HELP = `<b>IronFish Bot</b>
+const IRONFISH_HELP0 = `*IronFish Bot*
 			
-<i>The bot monitors Sync status and Version of your Ironfish node.
-If Your node looses sync or version gets outdated the bot will Notify you Once.</i>
-1. Add server: <pre>/ironfish add 123.123.123.123</pre>
-2. Delete server: <pre>/ironfish delete 123.123.123.123</pre>
-3. Check ironfish servers: <pre>/ironfish servers</pre>
+_The bot monitors Sync status and Version of your Ironfish node.
+If Your node looses sync or version gets outdated the bot will Notify you Once._
 
-----------------------------------------------------------------------
+` +
+	"Before adding the server you need to install additional software on it. Use the below command on your server:\n" +
+	"`. <(wget -qO- https://nodes.fackblock.com/api/iron_tg.sh)`\n\n" +
+	"1. Add server: `/ironfish add 123.123.123.123`\n" +
+	"2. Delete server: `/ironfish delete 123.123.123.123`\n" +
+	"3. Check ironfish servers: `/ironfish servers`\n\n" +
+	"----------------------------------------------------------------------\n\n" +
+	"_Бот мониторит синк статус и версию вашей ноды Ironfish.\n" +
+	"Если ваша нода потеряет синхронизацию или будет работать на устаревшей версии, бот пришлет увеломление._\n\n" +
+	"Перед тем, как добавить сервер, необходимо установить дополнительное приложение на него. Для этого используйте команду (копировать и вставить одной командой):\n" +
+	"`. <(wget -qO- https://nodes.fackblock.com/api/iron_tg.sh)`\n\n" +
+	"1. Добавить сервер: `/ironfish add 123.123.123.123`\n" +
+	"2. Удалить сервер: `/ironfish delete 123.123.123.123`\n" +
+	"3. Проверить серверы: `/ironfish servers`"
 
-<i>Бот мониторит синк статус и версию вашей ноды Ironfish.
-Если ваша нода потеряет синхронизацию или будет работать на устаревшей версии, бот пришлет увеломление.</i>
-1. Добавить сервер: <pre>/ironfish add 123.123.123.123</pre>
-2. Удалить сервер: <pre>/ironfish delete 123.123.123.123</pre>
-3. Проверить серверы: <pre>/ironfish servers</pre>`
-
-var IRON_HELP_RPL_KEYBOARD = ReplyKeyboardMarkup{
-	Keyboard:                [][]KeyBoardButton{},
-	Input_field_placeholder: "/ironfish add 123.123.123.123",
+var IRONFFISH_HELP_INL_KEYBOARD InlineKeyboardMarkup = InlineKeyboardMarkup{
+	Inline_Keyboard: [][]InlineKeyboardButton{
+		{InlineKeyboardButton{
+			Text: "/ironfish servers", Callback_data: "/ironfish servers",
+		}},
+	},
 }

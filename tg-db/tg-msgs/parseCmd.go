@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/ttimmatti/nodes-bot/tg-db/errror"
 )
 
 func validServerIp(server_ip string) bool {
@@ -62,7 +64,9 @@ func parseCmd(text string) (string, string, string, error) {
 		// cmd and 2 vals -- update
 		return textS[0], textS[1], textS[2], nil
 	default:
-		return "", "", "", fmt.Errorf("wrongCmd")
+		return "", "", "", errror.NewErrorf(
+			errror.ErrorCodeWrongCmd,
+			"wrongCmd")
 		//TODO: RETURN ERROR TO USER
 	}
 }

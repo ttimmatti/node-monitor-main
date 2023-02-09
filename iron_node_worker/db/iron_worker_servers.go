@@ -40,12 +40,11 @@ func UpdateBlVServer(ip, v string, bl int64) error {
 }
 
 func UpdateSyncUpdServer(ip string, synced, updated bool) error {
-	tz, _ := time.LoadLocation("Europe/Moscow")
-	tf := time.Now().In(tz).Format("Jan 2 15:04 MST")
+	t := time.Now().Unix()
 
 	sqlresult, err := DB.ExecContext(context.Background(),
 		"update "+IRON_SERVERS_DB+" set synced=$1,updated=$2,lastpong=$3 where ip=$4",
-		synced, updated, tf, ip)
+		synced, updated, fmt.Sprintf("%d", t), ip)
 	if err != nil {
 		// idk how it can happen
 		return errror.WrapErrorF(err, errror.ErrorCodeFailure,
