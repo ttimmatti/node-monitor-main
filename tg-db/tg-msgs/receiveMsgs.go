@@ -45,7 +45,7 @@ func StartReceiving(tg_api string, update_sec int64) {
 				}
 				answerCBQ(cbq.Id)
 			}
-			HandleMsg(msg)
+			go HandleMsg(msg)
 		}
 	}
 }

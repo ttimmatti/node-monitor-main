@@ -20,6 +20,10 @@ func HandleMsg(msg Msg) {
 		return
 	}
 
+	if msg.Text == "" {
+		return
+	}
+
 	isUser, isBanned := db.UserExistIsBanned(msg.From.Id)
 	if isBanned {
 		handleError(msg, errror.NewErrorf(
@@ -114,6 +118,10 @@ func handleCmd(isAdmin, isUser bool, cmd string, msg Msg) []error {
 		if err := handleStart(isUser, msg); err != nil {
 			return []error{fmt.Errorf("handleCmd: %w", err)}
 		}
+	case "/servers":
+		if err := handleServersMsg(msg); err != nil {
+			return []error{fmt.Errorf("handleCmd: %w", err)}
+		}
 	case "/ironfish":
 		if err := handleIronfishMsg(isUser, msg); err != nil {
 			return []error{fmt.Errorf("handleCmd: %w", err)}
@@ -193,8 +201,14 @@ func IsAdmin(id int64) bool {
 var SERVERS_RPL_KEYBOARD ReplyKeyboardMarkup = ReplyKeyboardMarkup{
 	Keyboard: [][]KeyBoardButton{
 		{KeyBoardButton{Text: "/start"}},
-		{KeyBoardButton{Text: "/ironfish servers"}},
-		{KeyBoardButton{Text: "/sui servers"}},
+		{
+			KeyBoardButton{Text: "/ironfish servers"},
+			KeyBoardButton{Text: "/sui servers"},
+		},
+		{
+			KeyBoardButton{Text: "/sui checker"},
+			KeyBoardButton{Text: "/servers disk"},
+		},
 	},
 	Resize_keyboard: true,
 	Is_persistent:   true,

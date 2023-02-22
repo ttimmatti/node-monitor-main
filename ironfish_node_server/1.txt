@@ -1,0 +1,13 @@
+Creating the transaction: [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 0% | ETA: 0s
+Creating the transaction: [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 1% | ETA: 100s
+Creating the transaction: [█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 3% | ETA: 98s
+Creating the transaction: [████████████████████████████████████████] 100% | ETA: 0s
+
+ 
+Minted asset ttimmatti from ttimmatti_main
+Asset Identifier: eb49786430eea33e340e52161f013833b0ce37aad900427e044be5d80fb7f125
+Value: 1552.00000000
+
+Transaction Hash: 5a9c2ff741b72875b38c153112bf6eefd6c0ecee6225cba34c49c14eb5d34594
+
+Find the transaction on https://explorer.ironfish.network/transaction/5a9c2ff741b72875b38c153112bf6eefd6c0ecee6225cba34c49c14eb5d34594 (it can take a few minutes before the transaction appears in the Explorer)

@@ -41,7 +41,7 @@ func sendMsg(msg interface{}) error {
 
 	if !ok {
 		return errror.NewErrorf(errror.ErrorCodeUnknown,
-			"sendMsg: ok return false. TG response: ", string(response))
+			"sendMsg: ok return false. TG response: "+string(response)+"\nPosted: "+string(respByte))
 	}
 
 	return nil

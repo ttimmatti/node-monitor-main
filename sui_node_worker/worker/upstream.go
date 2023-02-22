@@ -11,7 +11,7 @@ import (
 	"github.com/ttimmatti/nodes-bot/sui/errror"
 )
 
-const SUI_RPC = "http://fullnode.testnet.sui.io:9000/"
+const SUI_RPC = "https://fullnode.devnet.sui.io:443"
 
 // global version :
 // curl --location --request POST http://fullnode.testnet.sui.io:9000/ --header 'Content-Type: application/json' --data-raw '{ "jsonrpc":"2.0", "method":"rpc.discover","id":1}'

@@ -75,7 +75,7 @@ func SuiGetUserServers(chat_id int64) (string, error) {
 	id := fmt.Sprintf("%d", chat_id)
 
 	rows, err := DB.QueryContext(context.Background(),
-		"select ip,tx_id,version,synced,updated,status,lastpong from "+SUI_SERVERS_DB+" where chat_id=$1",
+		"select ip,tx_id,version,synced,updated,status,lastpong from "+SUI_SERVERS_DB+" where chat_id=$1 order by id",
 		id)
 	if err != nil {
 		//he does not have any servers
@@ -135,6 +135,37 @@ func SuiGetUserServers(chat_id int64) (string, error) {
 	}
 
 	return result1, nil
+}
+
+func SuiGetUserIps(chat_id int64) (string, error) {
+	id := fmt.Sprintf("%d", chat_id)
+
+	rows, err := DB.QueryContext(context.Background(),
+		"select ip from "+SUI_SERVERS_DB+" where chat_id=$1 order by id",
+		id)
+	if err != nil {
+		//he does not have any servers
+		return "", errror.WrapErrorF(err, errror.ErrorCodeNotFound,
+			"get_user_ips_query_error (id)", id)
+	}
+	defer rows.Close()
+
+	var ips []string
+	for rows.Next() {
+		var ip string
+		err := rows.Scan(&ip)
+		if err != nil {
+			log.Print("GetUserServers: end of scan? SCAN err:", err)
+		}
+
+		ip = strings.Join(strings.Split(ip, "."), "\\.")
+
+		ips = append(ips, ip)
+	}
+
+	result := strings.Join(ips, ";;")
+
+	return result, nil
 }
 
 func SuiDeleteUserServer(chat_id int64, server_ip string) error {

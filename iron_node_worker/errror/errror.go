@@ -49,6 +49,7 @@ const (
 	ErrorCodeInvalidArgument
 	ErrorCodeIsBanned
 	ErrorCodePongFalse
+	ErrorCodeNoFunds
 )
 
 // for not found and invalid argument, return to user

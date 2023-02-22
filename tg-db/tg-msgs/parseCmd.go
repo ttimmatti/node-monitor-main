@@ -43,9 +43,14 @@ func parseCmd(text string) (string, string, string, error) {
 		return "", "", "", fmt.Errorf("not a cmd")
 	}
 
-	textS := strings.Split(text, " ")
+	textS := []string{}
+	if strings.Contains(text, "_") {
+		textS = strings.Split(text, "_")
+	} else {
+		textS = strings.Split(text, " ")
+	}
 	textN := len(textS)
-	if len(textS) < 1 {
+	if textN < 1 {
 		//TODO: let me know about this error
 		return "", "", "", fmt.Errorf("!FOR SOME REASON TEXT WAS EMPTY!!! returning")
 	}
@@ -62,6 +67,11 @@ func parseCmd(text string) (string, string, string, error) {
 		return textS[0], textS[1], "", nil
 	case 3:
 		// cmd and 2 vals -- update
+		if strings.Contains(textS[2], "\\\\") {
+			textS[2] = strings.Join(strings.Split(textS[2], "\\\\"), "")
+		} else if strings.Contains(textS[2], "\\") {
+			textS[2] = strings.Join(strings.Split(textS[2], "\\"), "")
+		}
 		return textS[0], textS[1], textS[2], nil
 	default:
 		return "", "", "", errror.NewErrorf(

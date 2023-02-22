@@ -1,0 +1,14 @@
+Version              0.1.62 @ 4ab43f3
+Node                 STARTED
+Node Name            ttimmatti
+Block Graffiti       ttimmatti
+Memory               Heap: 61.69 MiB -> 95.53 MiB / 2.00 GiB (3.0%), RSS: 385.26 MiB (5.0%), Free: 1.09 GiB (85.6%)
+CPU                  Cores: 4, Current: 14.9%
+P2P Network          CONNECTED - In: 19 B/s, Out: 408 B/s, peers 49
+Mining               STARTED - 0 miners, 0 mined
+Mem Pool             Count: 23 tx, Bytes: 44.75 KiB
+Syncer               IDLE - 12.47 blocks added/sec
+Blockchain           00000000003290acf65a3b1cc10bc075bb8d9673dd055c8bd62eca7d84e89a03 (4977), Since HEAD: 1m (SYNCED)
+Accounts             00000000003290acf65a3b1cc10bc075bb8d9673dd055c8bd62eca7d84e89a03 (4977)
+Telemetry            STARTED - 429 <- 2 pending
+Workers              STARTED - 0 -> 0 / 3 - 0 jobs Δ, 0.13 jobs/s

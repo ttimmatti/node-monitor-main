@@ -65,7 +65,7 @@ func IronGetUserServers(chat_id int64) (string, error) {
 	id := fmt.Sprintf("%d", chat_id)
 
 	rows, err := DB.QueryContext(context.Background(),
-		"select ip,block,version,synced,updated,lastpong from "+IRON_SERVERS_DB+" where chat_id=$1",
+		"select ip,block,version,synced,updated,lastpong from "+IRON_SERVERS_DB+" where chat_id=$1 order by id",
 		id)
 	if err != nil {
 		//he does not have any servers
@@ -142,4 +142,35 @@ func IronDeleteUserServer(chat_id int64, server_ip string) error {
 	}
 
 	return nil
+}
+
+func IronGetUserIps(chat_id int64) (string, error) {
+	id := fmt.Sprintf("%d", chat_id)
+
+	rows, err := DB.QueryContext(context.Background(),
+		"select ip from "+IRON_SERVERS_DB+" where chat_id=$1 order by id",
+		id)
+	if err != nil {
+		//he does not have any servers
+		return "", errror.WrapErrorF(err, errror.ErrorCodeNotFound,
+			"IronGetUserIps_query_error (id)", id)
+	}
+	defer rows.Close()
+
+	var ips []string
+	for rows.Next() {
+		var ip string
+		err := rows.Scan(&ip)
+		if err != nil {
+			log.Print("IronGetUserIps: end of scan? SCAN err:", err)
+		}
+
+		ip = strings.Join(strings.Split(ip, "."), "\\.")
+
+		ips = append(ips, ip)
+	}
+
+	result := strings.Join(ips, ";;")
+
+	return result, nil
 }

@@ -1,0 +1,203 @@
+2023/01/20 19:20:36 Starting server
+2023/01/20 19:21:51 Starting server
+2023/01/20 19:21:54 request method not satisfied
+2023/01/20 19:21:54 request method not satisfied
+2023/01/20 19:21:55 request method not satisfied
+2023/01/20 19:21:55 request method not satisfied
+2023/01/20 19:21:56 request method not satisfied
+2023/01/20 19:21:56 request method not satisfied
+2023/01/20 19:21:56 request method not satisfied
+2023/01/20 19:21:57 request method not satisfied
+2023/01/20 19:21:57 request method not satisfied
+2023/01/20 19:21:57 request method not satisfied
+2023/01/20 19:22:38 Starting server
+2023/01/20 19:22:39 request method not satisfied
+2023/01/20 19:22:40 request method not satisfied
+2023/01/20 19:22:40 request method not satisfied
+2023/01/20 19:22:41 request method not satisfied
+2023/01/20 19:22:41 request method not satisfied
+2023/01/20 19:22:41 request method not satisfied
+2023/01/20 19:22:41 request method not satisfied
+2023/01/20 19:22:42 request method not satisfied
+2023/01/20 19:22:42 request method not satisfied
+2023/01/20 19:22:42 request method not satisfied
+2023/01/20 19:22:43 request method not satisfied
+2023/01/20 19:22:53 request method not satisfied
+2023/01/20 19:22:54 request method not satisfied
+2023/01/20 19:22:55 request method not satisfied
+2023/01/20 19:25:35 Starting server
+2023/01/20 19:25:37 request method not satisfied
+main.go:18: Starting server
+main.go:31: request method not satisfied
+main.go:19: Starting server
+main.go:32: request method not satisfied
+main.go:32: request method not satisfied
+main.go:32: request method not satisfied
+main.go:19: Starting server
+main.go:32: request method not satisfied
+main.go:19: Starting server
+main.go:32: request method not satisfied
+main.go:19: Starting server
+main.go:123: exec: "ironfish status": executable file not found in $PATH
+main.go:32: request method not satisfied
+main.go:123: exec: "ironfish status": executable file not found in $PATH
+main.go:32: request method not satisfied
+main.go:123: exec: "ironfish status": executable file not found in $PATH
+main.go:19: Starting server
+server.go:3230: http: panic serving 127.0.0.1:56308: runtime error: index out of range [1] with length 1
+goroutine 18 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/10030/src/net/http/server.go:1850 +0xbf
+panic({0x675880, 0xc000210000})
+	/snap/go/10030/src/runtime/panic.go:890 +0x262
+main.GetLastBlock({0x0?, 0x642ce0?})
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:92 +0x19a
+main.GetAll()
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:78 +0x87
+main.Output({0xc00018004d, 0x3})
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:41 +0x2d
+main.HttpGet({0x702710, 0xc0001b0000}, 0x4aacb3?)
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:30 +0x76
+net/http.HandlerFunc.ServeHTTP(0xc00010faf0?, {0x702710?, 0xc0001b0000?}, 0x0?)
+	/snap/go/10030/src/net/http/server.go:2109 +0x2f
+net/http.(*ServeMux).ServeHTTP(0xc000180049?, {0x702710, 0xc0001b0000}, 0xc00019c000)
+	/snap/go/10030/src/net/http/server.go:2487 +0x149
+net/http.serverHandler.ServeHTTP({0xc0001840c0?}, {0x702710, 0xc0001b0000}, 0xc00019c000)
+	/snap/go/10030/src/net/http/server.go:2947 +0x30c
+net/http.(*conn).serve(0xc000188000, {0x702b00, 0xc00007f1a0})
+	/snap/go/10030/src/net/http/server.go:1991 +0x607
+created by net/http.(*Server).Serve
+	/snap/go/10030/src/net/http/server.go:3102 +0x4db
+server.go:3230: http: panic serving 127.0.0.1:41514: runtime error: index out of range [1] with length 1
+goroutine 34 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/10030/src/net/http/server.go:1850 +0xbf
+panic({0x675880, 0xc0001b80a8})
+	/snap/go/10030/src/runtime/panic.go:890 +0x262
+main.GetLastBlock({0x0?, 0x642ce0?})
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:92 +0x19a
+main.GetAll()
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:78 +0x87
+main.Output({0xc00023404d, 0x3})
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:41 +0x2d
+main.HttpGet({0x702710, 0xc000250000}, 0x4aacb3?)
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:30 +0x76
+net/http.HandlerFunc.ServeHTTP(0xc00008eaf0?, {0x702710?, 0xc000250000?}, 0x0?)
+	/snap/go/10030/src/net/http/server.go:2109 +0x2f
+net/http.(*ServeMux).ServeHTTP(0xc000234049?, {0x702710, 0xc000250000}, 0xc000248000)
+	/snap/go/10030/src/net/http/server.go:2487 +0x149
+net/http.serverHandler.ServeHTTP({0xc00020c0f0?}, {0x702710, 0xc000250000}, 0xc000248000)
+	/snap/go/10030/src/net/http/server.go:2947 +0x30c
+net/http.(*conn).serve(0xc00023a000, {0x702b00, 0xc00007f1a0})
+	/snap/go/10030/src/net/http/server.go:1991 +0x607
+created by net/http.(*Server).Serve
+	/snap/go/10030/src/net/http/server.go:3102 +0x4db
+main.go:19: Starting server
+main.go:127: 
+server.go:3230: http: panic serving 127.0.0.1:33294: runtime error: index out of range [1] with length 1
+goroutine 8 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/10030/src/net/http/server.go:1850 +0xbf
+panic({0x675880, 0xc00020e000})
+	/snap/go/10030/src/runtime/panic.go:890 +0x262
+main.GetLastBlock({0x0?, 0x642ce0?})
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:92 +0x19a
+main.GetAll()
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:78 +0x87
+main.Output({0xc00002034d, 0x3})
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:41 +0x2d
+main.HttpGet({0x702710, 0xc0000fe000}, 0x4aacb3?)
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:30 +0x76
+net/http.HandlerFunc.ServeHTTP(0xc000093af0?, {0x702710?, 0xc0000fe000?}, 0x0?)
+	/snap/go/10030/src/net/http/server.go:2109 +0x2f
+net/http.(*ServeMux).ServeHTTP(0xc000020349?, {0x702710, 0xc0000fe000}, 0xc0000f6000)
+	/snap/go/10030/src/net/http/server.go:2487 +0x149
+net/http.serverHandler.ServeHTTP({0xc00007f290?}, {0x702710, 0xc0000fe000}, 0xc0000f6000)
+	/snap/go/10030/src/net/http/server.go:2947 +0x30c
+net/http.(*conn).serve(0xc000000b40, {0x702b00, 0xc00007f1a0})
+	/snap/go/10030/src/net/http/server.go:1991 +0x607
+created by net/http.(*Server).Serve
+	/snap/go/10030/src/net/http/server.go:3102 +0x4db
+main.go:127: 
+server.go:3230: http: panic serving 127.0.0.1:32884: runtime error: index out of range [1] with length 1
+goroutine 12 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/10030/src/net/http/server.go:1850 +0xbf
+panic({0x675880, 0xc00001c4b0})
+	/snap/go/10030/src/runtime/panic.go:890 +0x262
+main.GetLastBlock({0x0?, 0x642ce0?})
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:92 +0x19a
+main.GetAll()
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:78 +0x87
+main.Output({0xc00002048d, 0x3})
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:41 +0x2d
+main.HttpGet({0x702710, 0xc0000fe0e0}, 0x4aacb3?)
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:30 +0x76
+net/http.HandlerFunc.ServeHTTP(0xc00004eaf0?, {0x702710?, 0xc0000fe0e0?}, 0x0?)
+	/snap/go/10030/src/net/http/server.go:2109 +0x2f
+net/http.(*ServeMux).ServeHTTP(0xc000020489?, {0x702710, 0xc0000fe0e0}, 0xc0000f6100)
+	/snap/go/10030/src/net/http/server.go:2487 +0x149
+net/http.serverHandler.ServeHTTP({0xc00007f560?}, {0x702710, 0xc0000fe0e0}, 0xc0000f6100)
+	/snap/go/10030/src/net/http/server.go:2947 +0x30c
+net/http.(*conn).serve(0xc000000be0, {0x702b00, 0xc00007f1a0})
+	/snap/go/10030/src/net/http/server.go:1991 +0x607
+created by net/http.(*Server).Serve
+	/snap/go/10030/src/net/http/server.go:3102 +0x4db
+main.go:19: Starting server
+main.go:128: 
+server.go:3230: http: panic serving 127.0.0.1:54524: runtime error: index out of range [1] with length 1
+goroutine 21 [running]:
+net/http.(*conn).serve.func1()
+	/snap/go/10030/src/net/http/server.go:1850 +0xbf
+panic({0x675880, 0xc0000d21b0})
+	/snap/go/10030/src/runtime/panic.go:890 +0x262
+main.GetLastBlock({0x0?, 0x642ce0?})
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:92 +0x19a
+main.GetAll()
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:78 +0x87
+main.Output({0xc0000c020d, 0x3})
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:41 +0x2d
+main.HttpGet({0x702710, 0xc00013a000}, 0x4aacb3?)
+	/home/ttimmatti/my_scripts/go/ironfish_checker_server/main.go:30 +0x76
+net/http.HandlerFunc.ServeHTTP(0xc0000bdaf0?, {0x702710?, 0xc00013a000?}, 0x0?)
+	/snap/go/10030/src/net/http/server.go:2109 +0x2f
+net/http.(*ServeMux).ServeHTTP(0xc0000c0209?, {0x702710, 0xc00013a000}, 0xc000130000)
+	/snap/go/10030/src/net/http/server.go:2487 +0x149
+net/http.serverHandler.ServeHTTP({0xc00009b290?}, {0x702710, 0xc00013a000}, 0xc000130000)
+	/snap/go/10030/src/net/http/server.go:2947 +0x30c
+net/http.(*conn).serve(0xc0000b2be0, {0x702b00, 0xc00009b1a0})
+	/snap/go/10030/src/net/http/server.go:1991 +0x607
+created by net/http.(*Server).Serve
+	/snap/go/10030/src/net/http/server.go:3102 +0x4db
+main.go:19: Starting server
+main.go:128: Version              0.1.62 @ 4ab43f3
+Node                 STARTED
+Node Name            ttimmatti
+Block Graffiti       ttimmatti
+Memory               Heap: 96.98 MiB -> 282.20 MiB / 2.00 GiB (4.7%), RSS: 486.74 MiB (6.3%), Free: 883.55 MiB (88.6%)
+CPU                  Cores: 4, Current: 21.4%
+P2P Network          CONNECTED - In: 3.03 KB/s, Out: 5.11 KB/s, peers 50
+Mining               STARTED - 0 miners, 0 mined
+Mem Pool             Count: 55 tx, Bytes: 102.96 KiB
+Syncer               IDLE - 12.19 blocks added/sec
+Blockchain           000000000005693604f319c5d3269bd31fcc4f2c01a54f05a09efbf6441e4c5a (6371), Since HEAD: 1m 27s (SYNCED)
+Accounts             000000000005693604f319c5d3269bd31fcc4f2c01a54f05a09efbf6441e4c5a (6371)
+Telemetry            STARTED - 15901 <- 57 pending
+Workers              STARTED - 0 -> 0 / 3 - 0 jobs Δ, 0.61 jobs/s
+
+main.go:32: request method not satisfied
+main.go:128: Version              0.1.62 @ 4ab43f3
+Node                 STARTED
+Node Name            ttimmatti
+Block Graffiti       ttimmatti
+Memory               Heap: 127.40 MiB -> 291.95 MiB / 2.00 GiB (6.2%), RSS: 497.40 MiB (6.4%), Free: 932.86 MiB (88.0%)
+CPU                  Cores: 4, Current: 0.5%
+P2P Network          CONNECTED - In: 403 B/s, Out: 1.35 KB/s, peers 50
+Mining               STARTED - 0 miners, 0 mined
+Mem Pool             Count: 61 tx, Bytes: 115.41 KiB
+Syncer               IDLE - 12.19 blocks added/sec
+Blockchain           000000000005693604f319c5d3269bd31fcc4f2c01a54f05a09efbf6441e4c5a (6371), Since HEAD: 1m 45s (SYNCED)
+Accounts             000000000005693604f319c5d3269bd31fcc4f2c01a54f05a09efbf6441e4c5a (6371)
+Telemetry            STARTED - 15901 <- 57 pending
+Workers              STARTED - 0 -> 0 / 3 - 0 jobs Δ, 0.77 jobs/s
+

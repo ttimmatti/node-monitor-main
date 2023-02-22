@@ -13,7 +13,7 @@ import (
 )
 
 const REPEAT_MIN = 5
-const TX_ALERT_GAP = 5000
+const TX_ALERT_GAP = 20000
 
 var SERVERS []Server
 var WG_DialServers sync.WaitGroup
@@ -198,6 +198,13 @@ func UpdateDbServers(SERVERS []Server) []error {
 		}
 	}
 
+	for _, s := range NOPONG_SERVERS {
+		err := s.UpdateInDb()
+		if err != nil {
+			errs = append(errs, err)
+		}
+	}
+
 	if len(errs) == 0 {
 		return nil
 	}
@@ -289,37 +296,6 @@ func notifySBadSync(s Server, last_block int64) error {
 		return fmt.Errorf("noty_bad_sync: %w", err)
 	}
 	return nil
-}
-
-var FILTERED_SERVERS []Server
-var WG_FilterServers sync.WaitGroup
-
-func FilterPing(servers []Server) []Server {
-	FILTERED_SERVERS = []Server{}
-
-	WG_FilterServers.Add(len(servers))
-
-	log.Println("node_worker: ping servers")
-	for i, server := range servers {
-		go tryPingServer(i, server)
-	}
-
-	WG_FilterServers.Wait()
-
-	return FILTERED_SERVERS
-}
-
-func tryPingServer(i int, s Server) {
-	defer WG_FilterServers.Done()
-
-	err := s.Ping()
-	if err == nil {
-		// append to new arr
-		FILTERED_SERVERS = append(FILTERED_SERVERS, s)
-		log.Printf("go: tryPing: ping to %s suceeded", s.Ip)
-	} else {
-		log.Printf("go: tryPing: ping to %s failed", s.Ip)
-	}
 }
 
 //

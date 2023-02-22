@@ -9,19 +9,12 @@ import (
 )
 
 const LOST_SERVER_TEXT = `#ironfish
-
 <b>Your IronFish node last responce was more than 12 hours ago.</b>
-
 Consider checking your server to clarify what's the problem.
-
 If you want to delete this server from the bot use the button below the message.
-
 ----------------------------------------------
-
 <b>Ваш сервер IronFish не отвечает уже более 12 часов.</b>
-
 Советуем проверить сервер и попытаться найти проблему.
-
 Если вы хотите удалить этот сервер из бота, используйте кнопку снизу.`
 
 func filterLost() []error {

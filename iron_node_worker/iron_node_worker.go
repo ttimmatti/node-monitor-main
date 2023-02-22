@@ -23,8 +23,10 @@ func main() {
 
 	tg_api := env.GetTGApiEnv()
 	git_token := env.GetGitTokenEnv()
+	admin_id := env.GetAdminIdEnv()
 
+	node_worker.ADMIN_ID = admin_id
 	node_worker.GITHUB_TOKEN = git_token
 	node_worker.TG_API = tg_api
-	node_worker.Start()
+	node_worker.StartMBS()
 }

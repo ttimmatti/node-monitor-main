@@ -15,6 +15,7 @@ import (
 )
 
 const PORT = ":9000"
+const DISK_PORT = ":6598"
 
 // total txs on node :
 // curl --location --request POST http://0.0.0.0:9000/ --header 'Content-Type: application/json' --data-raw '{ "jsonrpc":"2.0", "method":"sui_getTotalTransactionNumber","id":1}'
@@ -23,15 +24,16 @@ const PORT = ":9000"
 // curl http://127.0.0.1:9184/metrics | grep uptime
 
 type Server struct {
-	Owner_id string
-	Ip       string
-	Tx_id0   int64
-	Tx_id    int64
-	Version  string
-	Synced   bool
-	Updated  bool
-	Status   string
-	LastPong int64
+	Owner_id  string
+	Ip        string
+	Tx_id0    int64
+	Tx_id     int64
+	Version   string
+	Synced    bool
+	Updated   bool
+	Status    string
+	LastPong  int64
+	DiskSpace string
 }
 
 func (s *Server) Ping() error {
